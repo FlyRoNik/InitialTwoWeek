@@ -33,6 +33,17 @@ public class StudentDAO {
         return mDB.query(table, columns, null, null, null, null, null);
     }
 
+    public void removeStudent(long id) {
+        mDB.delete(StudentEntry.TABLE_STUDENTS, StudentEntry._ID + " = " + id, null);
+    }
+
+    public void editStudent(long id, String name, String idGroup) {
+        ContentValues cv = new ContentValues();
+        cv.put(StudentEntry.COLUMN_NAME, name);
+        cv.put(StudentEntry.COLUMN_GROUP_ID, idGroup);
+        mDB.update(StudentEntry.TABLE_STUDENTS, cv, StudentEntry._ID + " = " + id, null);
+    }
+
     public void addStudent(String name, String group_id) {
         ContentValues cv = new ContentValues();
         cv.put(StudentEntry.COLUMN_NAME, name);
