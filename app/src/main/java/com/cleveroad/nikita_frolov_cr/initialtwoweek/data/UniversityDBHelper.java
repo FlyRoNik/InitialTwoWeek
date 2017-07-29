@@ -5,11 +5,13 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.R;
+
 import static com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityContract.*;
 
 public class UniversityDBHelper extends SQLiteOpenHelper {
-    private static final String DB_NAME = "universitydb";
-    private static final int DB_VERSION = 1;
+    public static final String DB_NAME = "universitydb";
+    public static final int DB_VERSION = 1;
 
     public UniversityDBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -32,18 +34,23 @@ public class UniversityDBHelper extends SQLiteOpenHelper {
         cv = new ContentValues();
         cv.put(StudentEntry.COLUMN_NAME, "name " + 1);
         cv.put(StudentEntry.COLUMN_GROUP_ID, 1);
+        cv.put(StudentEntry.COLUMN_PHOTO_ID, R.mipmap.ic_launcher);
         db.insert(StudentEntry.TABLE_STUDENTS, null, cv);
         cv.put(StudentEntry.COLUMN_NAME, "name " + 2);
         cv.put(StudentEntry.COLUMN_GROUP_ID, 1);
+        cv.put(StudentEntry.COLUMN_PHOTO_ID, R.mipmap.ic_launcher);
         db.insert(StudentEntry.TABLE_STUDENTS, null, cv);
         cv.put(StudentEntry.COLUMN_NAME, "name " + 3);
         cv.put(StudentEntry.COLUMN_GROUP_ID, 2);
+        cv.put(StudentEntry.COLUMN_PHOTO_ID, R.mipmap.ic_launcher);
         db.insert(StudentEntry.TABLE_STUDENTS, null, cv);
         cv.put(StudentEntry.COLUMN_NAME, "name " + 4);
         cv.put(StudentEntry.COLUMN_GROUP_ID, 2);
+        cv.put(StudentEntry.COLUMN_PHOTO_ID, R.mipmap.ic_launcher);
         db.insert(StudentEntry.TABLE_STUDENTS, null, cv);
         cv.put(StudentEntry.COLUMN_NAME, "name " + 5);
         cv.put(StudentEntry.COLUMN_GROUP_ID, 3);
+        cv.put(StudentEntry.COLUMN_PHOTO_ID, R.mipmap.ic_launcher);
         db.insert(StudentEntry.TABLE_STUDENTS, null, cv);
 
     }

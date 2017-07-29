@@ -9,7 +9,9 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/contentprovider" />
             <option value="$PROJECT_DIR$/cursorloader" />
+            <option value="$PROJECT_DIR$/listsandcards" />
             <option value="$PROJECT_DIR$/simplesqlite" />
             <option value="$PROJECT_DIR$/sqliteinnerjoin" />
             <option value="$PROJECT_DIR$/sqlitequery" />

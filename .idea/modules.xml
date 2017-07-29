@@ -4,7 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/InitialTwoWeek.iml" filepath="$PROJECT_DIR$/InitialTwoWeek.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/contentprovider/contentprovider.iml" filepath="$PROJECT_DIR$/contentprovider/contentprovider.iml" />
       <module fileurl="file://$PROJECT_DIR$/cursorloader/cursorloader.iml" filepath="$PROJECT_DIR$/cursorloader/cursorloader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/listsandcards/listsandcards.iml" filepath="$PROJECT_DIR$/listsandcards/listsandcards.iml" />
       <module fileurl="file://$PROJECT_DIR$/simplesqlite/simplesqlite.iml" filepath="$PROJECT_DIR$/simplesqlite/simplesqlite.iml" />
       <module fileurl="file://$PROJECT_DIR$/sqliteinnerjoin/sqliteinnerjoin.iml" filepath="$PROJECT_DIR$/sqliteinnerjoin/sqliteinnerjoin.iml" />
       <module fileurl="file://$PROJECT_DIR$/sqlitequery/sqlitequery.iml" filepath="$PROJECT_DIR$/sqlitequery/sqlitequery.iml" />

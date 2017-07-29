@@ -12,12 +12,14 @@ public final class UniversityContract {
         public final static String _ID = BaseColumns._ID;
         public final static String COLUMN_NAME = "name_student";
         public static final String COLUMN_GROUP_ID = "id_group";
+        public static final String COLUMN_PHOTO_ID = "id_photo";
 
         public static final String TABLE_STUDENTS_CREATE =
                 "create table " + TABLE_STUDENTS + "(" +
                         _ID + " integer primary key autoincrement, " +
                         COLUMN_NAME + " text, " +
                         COLUMN_GROUP_ID + " integer, " +
+                        COLUMN_PHOTO_ID + " integer, " +
                         "FOREIGN KEY(" + COLUMN_GROUP_ID + ") REFERENCES " +
                         GroupEntry.TABLE_GROUPS + "(" + GroupEntry._ID + ")" +
                         ");";
