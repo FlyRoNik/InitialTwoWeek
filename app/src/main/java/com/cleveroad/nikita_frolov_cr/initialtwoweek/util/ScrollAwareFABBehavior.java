@@ -1,4 +1,4 @@
-package com.cleveroad.nikita_frolov_cr.initialtwoweek;
+package com.cleveroad.nikita_frolov_cr.initialtwoweek.util;
 
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;

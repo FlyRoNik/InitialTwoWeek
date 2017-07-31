@@ -11,7 +11,7 @@ import android.widget.ImageView;
 
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.R;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.dao.StudentRepository;
-import com.cleveroad.nikita_frolov_cr.initialtwoweek.model.Student;
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.Student;
 
 public class EditStudentFragment extends Fragment implements View.OnClickListener {
 
@@ -46,7 +46,7 @@ public class EditStudentFragment extends Fragment implements View.OnClickListene
 
         View view = inflater.inflate(R.layout.fragment_edit_student, container, false);
 
-        mStudentRepository = StudentRepository.getInstance(getContext());
+        mStudentRepository = new StudentRepository();
 
         etName = view.findViewById(R.id.etName);
         etGroup = view.findViewById(R.id.etGroup);

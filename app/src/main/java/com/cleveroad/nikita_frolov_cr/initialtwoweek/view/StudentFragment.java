@@ -1,7 +1,10 @@
 package com.cleveroad.nikita_frolov_cr.initialtwoweek.view;
 
 import android.content.Context;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -14,17 +17,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.BuildConfig;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.R;
-import com.cleveroad.nikita_frolov_cr.initialtwoweek.dao.RepositoryObserver;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.controller.StudentRVAdapter;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.dao.StudentRepository;
-import com.cleveroad.nikita_frolov_cr.initialtwoweek.model.Student;
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityContract;
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityDBHelper;
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.Student;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentFragment extends Fragment implements View.OnClickListener,
-        RepositoryObserver,
         LoaderManager.LoaderCallbacks<List<Student>>{
 
     private static final int LOADER_MANAGER_ID = 1;
@@ -32,16 +36,17 @@ public class StudentFragment extends Fragment implements View.OnClickListener,
     private static final int CM_DELETE = 1;
     private static final int CM_EDIT = 2;
 
-    private StudentRepository mStudentRepository;
+    private static final Uri STUDENT_URI = Uri.parse("content://"
+            + BuildConfig.APPLICATION_ID + "." + UniversityDBHelper.DB_NAME + "/" +
+            UniversityContract.StudentEntry.TABLE_STUDENTS);
 
+    private StudentRepository mStudentRepository;
     private OnFragmentStudentListener mListener;
+    private StudentRVAdapter mStudentRVAdapter;
+    private ContentObserver mContentObserver;
 
     private RecyclerView rv;
-    private StudentRVAdapter mStudentRVAdapter;
-
     private FloatingActionButton bAddStudent;
-
-    private StudentsATLoader mStudentsATLoader;
 
     public static StudentFragment newInstance() {
         StudentFragment fragment = new StudentFragment();
@@ -61,7 +66,6 @@ public class StudentFragment extends Fragment implements View.OnClickListener,
         View view = inflater.inflate(R.layout.fragment_student, container, false);
 
         bAddStudent = view.findViewById(R.id.bAddStudent);
-
         bAddStudent.setOnClickListener(this);
 
         rv = view.findViewById(R.id.rvStudents);
@@ -72,13 +76,33 @@ public class StudentFragment extends Fragment implements View.OnClickListener,
 
         registerForContextMenu(rv);
 
-        mStudentRepository = StudentRepository.getInstance(getContext());
-        mStudentRepository.registerObserver(this);
-        mStudentsATLoader = new StudentsATLoader(getContext(), mStudentRepository);
+        mStudentRepository = new StudentRepository();
 
         getLoaderManager().initLoader(LOADER_MANAGER_ID, null, this);
 
-        mStudentRepository.open();
+        mContentObserver = new ContentObserver(new Handler()) {
+            @Override
+            public boolean deliverSelfNotifications() {
+
+                return super.deliverSelfNotifications();
+            }
+
+            @Override
+            public void onChange(boolean selfChange) {
+                super.onChange(selfChange);
+                getLoaderManager().getLoader(LOADER_MANAGER_ID).forceLoad();
+            }
+
+            @Override
+            public void onChange(boolean selfChange, Uri uri) {
+                super.onChange(selfChange, uri);
+            }
+        };
+
+        getActivity().getContentResolver()
+                .registerContentObserver(STUDENT_URI, true, mContentObserver);
+
+        getLoaderManager().getLoader(LOADER_MANAGER_ID).forceLoad();
 
         return view;
     }
@@ -98,9 +122,6 @@ public class StudentFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onDetach() {
         super.onDetach();
-        mStudentRepository.removeObserver(this);
-        mStudentRepository.close();
-        mStudentRepository = null;
         mListener = null;
     }
 
@@ -125,11 +146,6 @@ public class StudentFragment extends Fragment implements View.OnClickListener,
                 return super.onContextItemSelected(item);
         }
         return true;
-    }
-
-    @Override
-    public void onStudentDataChanged() {
-        getLoaderManager().getLoader(LOADER_MANAGER_ID).forceLoad();
     }
 
     @Override

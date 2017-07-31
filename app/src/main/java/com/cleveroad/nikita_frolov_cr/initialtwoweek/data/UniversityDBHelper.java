@@ -13,8 +13,18 @@ public class UniversityDBHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "universitydb";
     public static final int DB_VERSION = 1;
 
-    public UniversityDBHelper(Context context) {
+    private static UniversityDBHelper INSTANCE;
+
+    private UniversityDBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+    }
+
+    public static synchronized UniversityDBHelper getInstance(Context context)
+    {
+        if (INSTANCE == null)
+            INSTANCE = new UniversityDBHelper(context);
+
+        return INSTANCE;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.cleveroad.nikita_frolov_cr.initialtwoweek.model;
+package com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model;
 
 public class Student {
     private int id;

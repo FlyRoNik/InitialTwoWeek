@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.R;
-import com.cleveroad.nikita_frolov_cr.initialtwoweek.model.Student;
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.Student;
 
 import java.util.List;
 
@@ -110,6 +110,7 @@ public class StudentRVAdapter extends RecyclerView.Adapter<StudentRVAdapter.Stud
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view,
                                         ContextMenu.ContextMenuInfo contextMenuInfo) {
+            //TODO inflater
             contextMenu.add(0, CM_DELETE, getAdapterPosition(), R.string.delete_record);
             contextMenu.add(0, CM_EDIT, getAdapterPosition(), R.string.edit_record);
         }
