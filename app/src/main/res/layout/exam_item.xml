@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/cvStudent"
+    android:id="@+id/cvExam"
     >
 
     <RelativeLayout
@@ -14,7 +14,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ivPhoto"
+            android:id="@+id/ivPhotoExam"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/image_view_margin_right"
@@ -23,18 +23,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tvName"
-            android:layout_toRightOf="@+id/ivPhoto"
+            android:id="@+id/tvNameExam"
+            android:layout_toRightOf="@+id/ivPhotoExam"
             android:layout_alignParentTop="true"
             android:textSize="@dimen/text_view_text_size"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvGroup"
-            android:layout_toRightOf="@+id/ivPhoto"
-            android:layout_below="@+id/tvName"
             />
 
     </RelativeLayout>

@@ -9,7 +9,7 @@ import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.DaoSession;
 import org.greenrobot.greendao.database.Database;
 
 
-public class App extends Application {
+public class App extends com.activeandroid.app.Application {
 
     private static App sInstance;
     private DaoSession mDaoSession;
