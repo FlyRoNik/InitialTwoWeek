@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
-    private static final String TAG = "myLogs";
-
     public ScrollAwareFABBehavior(Context context, AttributeSet attrs) {
         super();
     }
@@ -19,7 +17,6 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
     public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
 
-        //child -> Floating Action Button
         if (dyConsumed > 0) {
             CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) child.getLayoutParams();
             int fab_bottomMargin = layoutParams.bottomMargin;

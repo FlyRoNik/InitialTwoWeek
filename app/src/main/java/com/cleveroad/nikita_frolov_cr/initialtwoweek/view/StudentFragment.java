@@ -24,13 +24,13 @@ import com.cleveroad.nikita_frolov_cr.initialtwoweek.dao.StudentRepository;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityContract;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityDBHelper;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.Student;
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.util.InterfaceNotImplement;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class StudentFragment extends Fragment implements View.OnClickListener,
-        LoaderManager.LoaderCallbacks<List<Student>>{
-
+        LoaderManager.LoaderCallbacks<List<Student>> {
     private static final int LOADER_MANAGER_ID = 1;
 
     private static final int CM_DELETE = 1;
@@ -43,9 +43,26 @@ public class StudentFragment extends Fragment implements View.OnClickListener,
     private StudentRepository mStudentRepository;
     private OnFragmentStudentListener mListener;
     private StudentRVAdapter mStudentRVAdapter;
-    private ContentObserver mContentObserver;
+    private ContentObserver mContentObserver = new ContentObserver(new Handler()) {
+        @Override
+        public boolean deliverSelfNotifications() {
 
-    private RecyclerView rv;
+            return super.deliverSelfNotifications();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            getLoaderManager().getLoader(LOADER_MANAGER_ID).forceLoad();
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            super.onChange(selfChange, uri);
+        }
+    };
+
+    private RecyclerView rvStudents;
     private FloatingActionButton bAddStudent;
 
     public static StudentFragment newInstance() {
@@ -68,40 +85,19 @@ public class StudentFragment extends Fragment implements View.OnClickListener,
         bAddStudent = view.findViewById(R.id.bAddStudent);
         bAddStudent.setOnClickListener(this);
 
-        rv = view.findViewById(R.id.rvStudents);
-        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvStudents = view.findViewById(R.id.rvStudents);
+        rvStudents.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mStudentRVAdapter = new StudentRVAdapter(new ArrayList<Student>());
-        rv.setAdapter(mStudentRVAdapter);
+        rvStudents.setAdapter(mStudentRVAdapter);
 
-        registerForContextMenu(rv);
+        registerForContextMenu(rvStudents);
 
         mStudentRepository = new StudentRepository();
 
         getLoaderManager().initLoader(LOADER_MANAGER_ID, null, this);
-
-        mContentObserver = new ContentObserver(new Handler()) {
-            @Override
-            public boolean deliverSelfNotifications() {
-
-                return super.deliverSelfNotifications();
-            }
-
-            @Override
-            public void onChange(boolean selfChange) {
-                super.onChange(selfChange);
-                getLoaderManager().getLoader(LOADER_MANAGER_ID).forceLoad();
-            }
-
-            @Override
-            public void onChange(boolean selfChange, Uri uri) {
-                super.onChange(selfChange, uri);
-            }
-        };
-
         getActivity().getContentResolver()
                 .registerContentObserver(STUDENT_URI, true, mContentObserver);
-
         getLoaderManager().getLoader(LOADER_MANAGER_ID).forceLoad();
 
         return view;
@@ -114,8 +110,8 @@ public class StudentFragment extends Fragment implements View.OnClickListener,
         if (context instanceof OnFragmentStudentListener) {
             mListener = (OnFragmentStudentListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentStudentListener");
+            throw  new InterfaceNotImplement(context.toString()
+            + " must implement " + OnFragmentStudentListener.class.getSimpleName());
         }
     }
 
@@ -167,7 +163,7 @@ public class StudentFragment extends Fragment implements View.OnClickListener,
     private static class StudentsATLoader extends AsyncTaskLoader<List<Student>> {
         private StudentRepository mStudentRepository;
 
-        public StudentsATLoader(Context context, StudentRepository studentRepository) {
+        StudentsATLoader(Context context, StudentRepository studentRepository) {
             super(context);
             mStudentRepository = studentRepository;
         }

@@ -1,47 +1,47 @@
 package com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model;
 
 public class Student {
-    private int id;
-    private String name;
-    private int idGroup;
-    private int idPhoto;
+    private int mId;
+    private String mName;
+    private int mIdGroup;
+    private int mIdPhoto;
 
     public Student(int id, String name, int idGroup, int idPhoto) {
-        this.id = id;
-        this.name = name;
-        this.idGroup = idGroup;
-        this.idPhoto = idPhoto;
+        this.mId = id;
+        this.mName = name;
+        this.mIdGroup = idGroup;
+        this.mIdPhoto = idPhoto;
     }
 
     public int getId() {
-        return id;
+        return mId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int mId) {
+        this.mId = mId;
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String mName) {
+        this.mName = mName;
     }
 
     public int getIdGroup() {
-        return idGroup;
+        return mIdGroup;
     }
 
-    public void setIdGroup(int idGroup) {
-        this.idGroup = idGroup;
+    public void setIdGroup(int mIdGroup) {
+        this.mIdGroup = mIdGroup;
     }
 
     public int getIdPhoto() {
-        return idPhoto;
+        return mIdPhoto;
     }
 
-    public void setIdPhoto(int idPhoto) {
-        this.idPhoto = idPhoto;
+    public void setIdPhoto(int mIdPhoto) {
+        this.mIdPhoto = mIdPhoto;
     }
 }

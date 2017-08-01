@@ -1,13 +1,11 @@
 package com.cleveroad.nikita_frolov_cr.initialtwoweek.view.edit;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.R;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.dao.StudentRepository;
@@ -19,9 +17,6 @@ public class EditStudentFragment extends Fragment implements View.OnClickListene
 
     private EditText etName;
     private EditText etGroup;
-    private ImageView ivPhotoStudent;
-
-    private FloatingActionButton btnSubmit;
 
     private static final String KEY_STUDENT_ID = "studentID";
 
@@ -50,12 +45,10 @@ public class EditStudentFragment extends Fragment implements View.OnClickListene
 
         etName = view.findViewById(R.id.etName);
         etGroup = view.findViewById(R.id.etGroup);
-        ivPhotoStudent = view.findViewById(R.id.ivPhotoStudent);
 
-        btnSubmit = view.findViewById(R.id.bSubmit);
-        btnSubmit.setOnClickListener(this);
+        view.findViewById(R.id.bSubmitStudent).setOnClickListener(this);
 
-        if (getArguments().getInt(KEY_STUDENT_ID, -1) != -1) {
+        if (getArguments().containsKey(KEY_STUDENT_ID)) {
             Student student = mStudentRepository.getStudent(getArguments().getInt(KEY_STUDENT_ID));
 
             etName.setText(student.getName());
@@ -68,21 +61,22 @@ public class EditStudentFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.bSubmit:
+            case R.id.bSubmitStudent:
                 chooseMethod();
                 break;
+            default:
         }
     }
 
     private void chooseMethod(){
-        if (getArguments().getInt(KEY_STUDENT_ID, -1) != -1) {
+        if (getArguments().containsKey(KEY_STUDENT_ID)) {
             mStudentRepository.editStudent(getArguments().getInt(KEY_STUDENT_ID),
                     etName.getText().toString(),
                     etGroup.getText().toString(),
                     R.mipmap.emma);
         }else {
             mStudentRepository.addStudent(etName.getText().toString(),
-                    Integer.parseInt(etGroup.getText().toString()), R.mipmap.emma); //TODO choose photo
+                    Integer.parseInt(etGroup.getText().toString()), R.mipmap.emma); //TODO choose photo (spiner)
         }
         getFragmentManager().popBackStack();
     }

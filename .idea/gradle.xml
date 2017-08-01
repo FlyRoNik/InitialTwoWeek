@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/contentprovider" />
             <option value="$PROJECT_DIR$/contentprovidertwo" />
             <option value="$PROJECT_DIR$/cursorloader" />
+            <option value="$PROJECT_DIR$/greendao" />
             <option value="$PROJECT_DIR$/listsandcards" />
             <option value="$PROJECT_DIR$/simplesqlite" />
             <option value="$PROJECT_DIR$/sqliteinnerjoin" />

@@ -1,6 +1,7 @@
 package com.cleveroad.nikita_frolov_cr.initialtwoweek.dao;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -15,7 +16,6 @@ import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityContract.Stu
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityDBHelper;
 
 public class StudentContentProvider extends ContentProvider {
-
     private static final UriMatcher mUriMatcher;
     private static final String AUTHORITY = BuildConfig.APPLICATION_ID + "." +
             UniversityDBHelper.DB_NAME;
@@ -35,14 +35,19 @@ public class StudentContentProvider extends ContentProvider {
     static {
         mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         mUriMatcher.addURI(AUTHORITY, StudentEntry.TABLE_STUDENTS, URI_STUDENTS);
-        mUriMatcher.addURI(AUTHORITY, StudentEntry.TABLE_STUDENTS + "/*", URI_STUDENT_ID);
+        mUriMatcher.addURI(AUTHORITY, StudentEntry.TABLE_STUDENTS + "/#", URI_STUDENT_ID);
     }
 
     private UniversityDBHelper mDbHelper;
+    private ContentResolver mContentResolver;
 
     @Override
     public boolean onCreate() {
-        mDbHelper = UniversityDBHelper.getInstance(getContext());
+        //TODO question
+        if (getContext() != null) {
+            mDbHelper = UniversityDBHelper.getInstance(getContext());
+            mContentResolver = getContext().getContentResolver();
+        }
         return true;
     }
 
@@ -59,6 +64,7 @@ public class StudentContentProvider extends ContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
+        //TODO question
         if (mUriMatcher.match(uri) != URI_STUDENTS)
             throw new IllegalArgumentException("Wrong URI: " + uri);
 
@@ -66,7 +72,7 @@ public class StudentContentProvider extends ContentProvider {
         long id = mDB.insert(StudentEntry.TABLE_STUDENTS, null, values);
         Uri resultUri = ContentUris.withAppendedId(STUDENT_CONTENT_URI, id);
 
-        getContext().getContentResolver().notifyChange(resultUri, null);
+        mContentResolver.notifyChange(resultUri, null);
         return resultUri;
     }
 
@@ -93,8 +99,9 @@ public class StudentContentProvider extends ContentProvider {
         Cursor cursor = mDB.query(StudentEntry.TABLE_STUDENTS, projection, selection,
                 selectionArgs, null, null, sortOrder);
 
-        cursor.setNotificationUri(getContext().getContentResolver(),
+        cursor.setNotificationUri(mContentResolver,
                 STUDENT_CONTENT_URI);
+
         return cursor;
     }
 
@@ -119,8 +126,7 @@ public class StudentContentProvider extends ContentProvider {
         }
         SQLiteDatabase mDB = mDbHelper.getWritableDatabase();
         int id = mDB.update(StudentEntry.TABLE_STUDENTS, values, selection, selectionArgs);
-
-        getContext().getContentResolver().notifyChange(uri, null);
+        mContentResolver.notifyChange(uri, null);
         return id;
     }
 
@@ -142,9 +148,8 @@ public class StudentContentProvider extends ContentProvider {
                 throw new IllegalArgumentException("Wrong URI: " + uri);
         }
         SQLiteDatabase mDB = mDbHelper.getWritableDatabase();
-        int cnt = mDB.delete(StudentEntry.TABLE_STUDENTS, selection, selectionArgs);
-
-        getContext().getContentResolver().notifyChange(uri, null);
-        return cnt;
+        int id = mDB.delete(StudentEntry.TABLE_STUDENTS, selection, selectionArgs);
+        mContentResolver.notifyChange(uri, null);
+        return id;
     }
 }

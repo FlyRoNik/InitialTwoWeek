@@ -20,9 +20,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/fAB_margin"
         android:src="@android:drawable/ic_menu_add"
-        app:layout_behavior="com.cleveroad.nikita_frolov_cr.initialtwoweek.util.ScrollAwareFABBehavior" />
+        app:layout_behavior="@string/fAB_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>
 

@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/contentprovider/contentprovider.iml" filepath="$PROJECT_DIR$/contentprovider/contentprovider.iml" />
       <module fileurl="file://$PROJECT_DIR$/contentprovidertwo/contentprovidertwo.iml" filepath="$PROJECT_DIR$/contentprovidertwo/contentprovidertwo.iml" />
       <module fileurl="file://$PROJECT_DIR$/cursorloader/cursorloader.iml" filepath="$PROJECT_DIR$/cursorloader/cursorloader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/greendao/greendao.iml" filepath="$PROJECT_DIR$/greendao/greendao.iml" />
       <module fileurl="file://$PROJECT_DIR$/listsandcards/listsandcards.iml" filepath="$PROJECT_DIR$/listsandcards/listsandcards.iml" />
       <module fileurl="file://$PROJECT_DIR$/simplesqlite/simplesqlite.iml" filepath="$PROJECT_DIR$/simplesqlite/simplesqlite.iml" />
       <module fileurl="file://$PROJECT_DIR$/sqliteinnerjoin/sqliteinnerjoin.iml" filepath="$PROJECT_DIR$/sqliteinnerjoin/sqliteinnerjoin.iml" />

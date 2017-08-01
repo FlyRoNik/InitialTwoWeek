@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.R;
 
 public class MainFragment extends Fragment {
+    private final static String[] TITLES = new String[]{"Students", "Groups", "Exams", "Ratings"};
 
     private ViewPager pWrap;
     private PagerAdapter mPagerAdapter;
@@ -34,10 +35,9 @@ public class MainFragment extends Fragment {
 
         FragmentManager fragmentManager = getChildFragmentManager();
         mPagerAdapter = new FragmentPagerAdapter(fragmentManager) {
-
             @Override
             public int getCount() {
-                return 4;
+                return TITLES.length;
             }
 
             @Override
@@ -62,22 +62,7 @@ public class MainFragment extends Fragment {
 
             @Override
             public CharSequence getPageTitle(int position) {
-                String title = "";
-                switch (position) {
-                    case 0:
-                        title = "Students";
-                        break;
-                    case 1:
-                        title = "Groups";
-                        break;
-                    case 2:
-                        title = "Exams";
-                        break;
-                    case 3:
-                        title = "Ratings";
-                        break;
-                }
-                return title;
+                return TITLES[position];
             }
         };
         pWrap.setAdapter(mPagerAdapter);

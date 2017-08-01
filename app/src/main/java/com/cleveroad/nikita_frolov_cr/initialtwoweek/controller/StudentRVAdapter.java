@@ -13,23 +13,24 @@ import android.widget.TextView;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.R;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.Student;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentRVAdapter extends RecyclerView.Adapter<StudentRVAdapter.StudentViewHolder>{
 
-    private List<Student> students;
+    private List<Student> mStudents;
 
     public StudentRVAdapter(List<Student> students) {
-        this.students = students;
+        this.mStudents = students;
     }
 
     public List<Student> getStudents() {
-        return students;
+        return new ArrayList<>(mStudents);
     }
 
     public void setStudents(List<Student> students) {
-        this.students.clear();
-        this.students.addAll(students);
+        this.mStudents.clear();
+        this.mStudents.addAll(students);
     }
 
     @Override
@@ -42,18 +43,18 @@ public class StudentRVAdapter extends RecyclerView.Adapter<StudentRVAdapter.Stud
 
     @Override
     public void onBindViewHolder(StudentViewHolder holder, int position) {
-        holder.getTvName().setText(students.get(position).getName());
-        holder.getIvPhoto().setImageResource(students.get(position).getIdPhoto());
-        holder.getTvGroup().setText(String.valueOf(students.get(position).getIdGroup()));
+        holder.getTvName().setText(mStudents.get(position).getName());
+        holder.getIvPhoto().setImageResource(mStudents.get(position).getIdPhoto());
+        holder.getTvGroup().setText(String.valueOf(mStudents.get(position).getIdGroup()));
     }
 
     @Override
     public int getItemCount() {
-        return students.size();
+        return mStudents.size();
     }
 
     public Student getItemSelected(MenuItem item) {
-        return students.get(item.getOrder());
+        return mStudents.get(item.getOrder());
     }
 
     public static class StudentViewHolder extends RecyclerView.ViewHolder implements
@@ -110,7 +111,7 @@ public class StudentRVAdapter extends RecyclerView.Adapter<StudentRVAdapter.Stud
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view,
                                         ContextMenu.ContextMenuInfo contextMenuInfo) {
-            //TODO inflater
+            //TODO dialog
             contextMenu.add(0, CM_DELETE, getAdapterPosition(), R.string.delete_record);
             contextMenu.add(0, CM_EDIT, getAdapterPosition(), R.string.edit_record);
         }

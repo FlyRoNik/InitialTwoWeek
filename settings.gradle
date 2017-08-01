@@ -1,1 +1,1 @@
-include ':app', ':simplesqlite', ':sqlitequery', ':sqliteinnerjoin', ':cursorloader', ':listsandcards', ':contentprovider', ':contentprovidertwo', ':testapplication'
+include ':app', ':simplesqlite', ':sqlitequery', ':sqliteinnerjoin', ':cursorloader', ':listsandcards', ':contentprovider', ':contentprovidertwo', ':testapplication', ':greendao'
