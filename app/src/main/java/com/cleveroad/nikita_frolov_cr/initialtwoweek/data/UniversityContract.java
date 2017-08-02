@@ -9,7 +9,7 @@ public final class UniversityContract {
     public static final class StudentEntry implements BaseColumns {
         public static final String TABLE_STUDENTS = "students";
 
-        public final static String _ID = BaseColumns._ID;
+        public final static String _ID = "Id";
         public final static String COLUMN_NAME = "name_student";
         public static final String COLUMN_GROUP_ID = "id_group";
         public static final String COLUMN_PHOTO_ID = "id_photo";
@@ -28,7 +28,7 @@ public final class UniversityContract {
     public static final class GroupEntry implements BaseColumns {
         public static final String TABLE_GROUPS = "groups";
 
-        public final static String _ID = BaseColumns._ID;
+        public final static String _ID = "Id";
         public final static String COLUMN_NAME = "name_group";
 
         public static final String TABLE_GROUPS_CREATE =

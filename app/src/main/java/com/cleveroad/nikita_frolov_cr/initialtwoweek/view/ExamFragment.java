@@ -25,7 +25,6 @@ import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityDBHelper;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.Exam;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.util.InterfaceNotImplement;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ExamFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Exam>>{
@@ -41,7 +40,6 @@ public class ExamFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private RecyclerView rvExams;
     private ExamRVAdapter mExamRVAdapter;
-    private List<Exam> mExams;
     private OnFragmentExamListener mListener;
     private ExamRepository mExamRepository;
     private ContentObserver mContentObserver = new ContentObserver(new Handler()) {
@@ -70,29 +68,10 @@ public class ExamFragment extends Fragment implements LoaderManager.LoaderCallba
         return fragment;
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_exam, container, false);
-        rvExams = view.findViewById(R.id.rvExams);
-
-        mExams = new ArrayList<>();
-        mExamRVAdapter = new ExamRVAdapter(mExams);
-        rvExams.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvExams.setAdapter(mExamRVAdapter);
-
-        registerForContextMenu(rvExams);
-        rvExams.setOnCreateContextMenuListener(this);
-
-        view.findViewById(R.id.bAddExam).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.addExam();
-            }
-        });
-
-        return view;
+    public void onResume() {
+        super.onResume();
+        getLoaderManager().getLoader(LOADER_MANAGER_ID).forceLoad();
     }
 
     @Override
@@ -104,17 +83,35 @@ public class ExamFragment extends Fragment implements LoaderManager.LoaderCallba
             throw new InterfaceNotImplement(context.toString()
                     + " must implement " + OnFragmentExamListener.class.getSimpleName());
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_exam, container, false);
+        rvExams = view.findViewById(R.id.rvExams);
+
+        mExamRVAdapter = new ExamRVAdapter();
+        rvExams.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvExams.setAdapter(mExamRVAdapter);
+
+        registerForContextMenu(rvExams);
+        rvExams.setOnCreateContextMenuListener(this);
+
+        view.findViewById(R.id.bAddExam).setOnClickListener(view1 -> mListener.addExam());
+
         mExamRepository = new ExamRepository(getContext().getContentResolver());
         getLoaderManager().initLoader(LOADER_MANAGER_ID, null, this);
         getActivity().getContentResolver()
                 .registerContentObserver(EXAM_UPDATE_URI, true, mContentObserver);
-        getLoaderManager().getLoader(LOADER_MANAGER_ID).forceLoad();
-
+        return view;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        getActivity().getContentResolver()
+                .unregisterContentObserver(mContentObserver);
         mListener = null;
     }
 
@@ -133,11 +130,6 @@ public class ExamFragment extends Fragment implements LoaderManager.LoaderCallba
         return true;
     }
 
-    public void updateExams() {
-        mExams = mExamRepository.getAllExams();
-        mExamRVAdapter.setExams(mExams);
-    }
-
     @Override
     public Loader<List<Exam>> onCreateLoader(int id, Bundle args) {
         return new ExamsATLoader(getContext(), mExamRepository);
@@ -145,9 +137,7 @@ public class ExamFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoadFinished(Loader<List<Exam>> loader, List<Exam> data) {
-        mExams.clear();
-        mExams.addAll(data);
-        updateExams();
+        mExamRVAdapter.setExams(data);
     }
 
     @Override

@@ -17,8 +17,8 @@ import java.util.List;
 public class ExamRVAdapter extends RecyclerView.Adapter<ExamRVAdapter.ExamHolder>{
     private List<Exam> mExams;
 
-    public ExamRVAdapter(List<Exam> exams) {
-        this.mExams = exams;
+    public ExamRVAdapter() {
+        this.mExams = new ArrayList<>();
     }
 
     @Override

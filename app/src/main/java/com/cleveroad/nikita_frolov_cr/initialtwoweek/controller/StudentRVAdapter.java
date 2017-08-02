@@ -1,6 +1,5 @@
 package com.cleveroad.nikita_frolov_cr.initialtwoweek.controller;
 
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -17,11 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentRVAdapter extends RecyclerView.Adapter<StudentRVAdapter.StudentViewHolder>{
-
     private List<Student> mStudents;
 
-    public StudentRVAdapter(List<Student> students) {
-        this.mStudents = students;
+    public StudentRVAdapter() {
+        this.mStudents = new ArrayList<>();
     }
 
     public List<Student> getStudents() {
@@ -29,8 +27,9 @@ public class StudentRVAdapter extends RecyclerView.Adapter<StudentRVAdapter.Stud
     }
 
     public void setStudents(List<Student> students) {
-        this.mStudents.clear();
-        this.mStudents.addAll(students);
+        mStudents.clear();
+        mStudents.addAll(students);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -43,9 +42,8 @@ public class StudentRVAdapter extends RecyclerView.Adapter<StudentRVAdapter.Stud
 
     @Override
     public void onBindViewHolder(StudentViewHolder holder, int position) {
-        holder.getTvName().setText(mStudents.get(position).getName());
-        holder.getIvPhoto().setImageResource(mStudents.get(position).getIdPhoto());
-        holder.getTvGroup().setText(String.valueOf(mStudents.get(position).getIdGroup()));
+        Student student = mStudents.get(position);
+        holder.bindStudent(student);
     }
 
     @Override
@@ -62,50 +60,22 @@ public class StudentRVAdapter extends RecyclerView.Adapter<StudentRVAdapter.Stud
         private static final int CM_DELETE = 1;
         private static final int CM_EDIT = 2;
 
-        private CardView mCardView;
-        private TextView tvName;
-        private TextView tvGroup;
-        private ImageView ivPhoto;
+        private TextView tvStudentName;
+        private TextView tvStudentGroup;
+        private ImageView ivStudentPhoto;
 
         public StudentViewHolder(View itemView) {
             super(itemView);
+            tvStudentName = itemView.findViewById(R.id.tvStudentName);
+            tvStudentGroup = itemView.findViewById(R.id.tvStudentGroup);
+            ivStudentPhoto = itemView.findViewById(R.id.ivStudentPhoto);
             itemView.setOnCreateContextMenuListener(this);
-            mCardView = itemView.findViewById(R.id.cvStudent);
-            tvName = itemView.findViewById(R.id.tvName);
-            tvGroup = itemView.findViewById(R.id.tvGroup);
-            ivPhoto = itemView.findViewById(R.id.ivPhoto);
         }
 
-        public CardView getmCardView() {
-            return mCardView;
-        }
-
-        public void setmCardView(CardView mCardView) {
-            this.mCardView = mCardView;
-        }
-
-        public TextView getTvName() {
-            return tvName;
-        }
-
-        public void setTvName(TextView tvName) {
-            this.tvName = tvName;
-        }
-
-        public ImageView getIvPhoto() {
-            return ivPhoto;
-        }
-
-        public void setIvPhoto(ImageView ivPhoto) {
-            this.ivPhoto = ivPhoto;
-        }
-
-        public TextView getTvGroup() {
-            return tvGroup;
-        }
-
-        public void setTvGroup(TextView tvGroup) {
-            this.tvGroup = tvGroup;
+        void bindStudent(Student student) {
+            tvStudentName.setText(student.getName());
+            ivStudentPhoto.setImageResource(Integer.parseInt(student.getIdPhoto().toString()));
+            tvStudentGroup.setText(String.valueOf(student.getGroup().getId()));
         }
 
         @Override

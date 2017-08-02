@@ -4,16 +4,17 @@ import android.content.ContentResolver;
 import android.net.Uri;
 
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.BuildConfig;
-import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityContract;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityDBHelper;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.Exam;
 
 import java.util.List;
 
+import static com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityContract.ExamEntry;
+
 public class ExamRepository {
     private static final Uri EXAM_UPDATE_URI = Uri.parse("content://"
             + BuildConfig.APPLICATION_ID + "." + UniversityDBHelper.DB_NAME + "/" +
-            UniversityContract.ExamEntry.TABLE_EXAMS);
+            ExamEntry.TABLE_EXAMS);
 
     private ContentResolver mContentResolver;
 

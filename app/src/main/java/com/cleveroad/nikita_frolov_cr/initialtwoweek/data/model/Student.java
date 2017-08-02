@@ -1,47 +1,41 @@
 package com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model;
 
-public class Student {
-    private int mId;
-    private String mName;
-    private int mIdGroup;
-    private int mIdPhoto;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
-    public Student(int id, String name, int idGroup, int idPhoto) {
-        this.mId = id;
-        this.mName = name;
-        this.mIdGroup = idGroup;
-        this.mIdPhoto = idPhoto;
-    }
+@Table(name = "students")
+public class Student extends Model{
+    @Column(name = "name_student")
+    private String name;
 
-    public int getId() {
-        return mId;
-    }
+    @Column(name = "id_group")
+    private Group group;
 
-    public void setId(int mId) {
-        this.mId = mId;
-    }
+    @Column(name = "id_photo")
+    private Long idPhoto;
 
     public String getName() {
-        return mName;
+        return name;
     }
 
-    public void setName(String mName) {
-        this.mName = mName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getIdGroup() {
-        return mIdGroup;
+    public Group getGroup() {
+        return group;
     }
 
-    public void setIdGroup(int mIdGroup) {
-        this.mIdGroup = mIdGroup;
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
-    public int getIdPhoto() {
-        return mIdPhoto;
+    public Long getIdPhoto() {
+        return idPhoto;
     }
 
-    public void setIdPhoto(int mIdPhoto) {
-        this.mIdPhoto = mIdPhoto;
+    public void setIdPhoto(Long idPhoto) {
+        this.idPhoto = idPhoto;
     }
 }

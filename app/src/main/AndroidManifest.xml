@@ -20,13 +20,6 @@
             </intent-filter>
         </activity>
 
-        <provider
-            android:name=".dao.StudentContentProvider"
-            android:authorities="com.cleveroad.nikita_frolov_cr.initialtwoweek.universitydb"
-            android:enabled="true"
-            android:exported="true"
-            android:readPermission="com.cleveroad.PERMISSION" />
-
         <meta-data
             android:name="AA_DB_NAME"
             android:value="universitydb" />
@@ -35,13 +28,8 @@
             android:value="1" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.Exam" />
+            android:value="com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.Group, com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.Exam" />
 
-        <provider
-            android:name=".dao.ExamContentProvider"
-            android:authorities="com.cleveroad.nikita_frolov_cr.initialtwoweek.universitydb2"
-            android:enabled="true"
-            android:exported="true" />
     </application>
 
 </manifest>

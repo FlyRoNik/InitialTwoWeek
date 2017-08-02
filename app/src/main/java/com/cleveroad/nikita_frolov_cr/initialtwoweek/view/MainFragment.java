@@ -15,7 +15,7 @@ import com.cleveroad.nikita_frolov_cr.initialtwoweek.R;
 public class MainFragment extends Fragment {
     private final static String[] TITLES = new String[]{"Students", "Groups", "Exams", "Ratings"};
 
-    private ViewPager vpConteiner;
+    private ViewPager vpContainer;
     private PagerAdapter mPagerAdapter;
 
     public static MainFragment newInstance() {
@@ -28,6 +28,16 @@ public class MainFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        vpContainer = view.findViewById(R.id.vpConteiner);
         mPagerAdapter = new FragmentPagerAdapter(getChildFragmentManager()) {
             @Override
             public int getCount() {
@@ -55,16 +65,7 @@ public class MainFragment extends Fragment {
                 return TITLES[position];
             }
         };
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-
-        vpConteiner = view.findViewById(R.id.vpConteiner);
-        vpConteiner.setAdapter(mPagerAdapter);
+        vpContainer.setAdapter(mPagerAdapter);
         return view;
     }
 }

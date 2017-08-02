@@ -18,8 +18,8 @@ import java.util.List;
 public class GroupRVAdapter extends RecyclerView.Adapter<GroupRVAdapter.GroupHolder>{
     private List<Group> mGroups;
 
-    public GroupRVAdapter(List<Group> groups) {
-        this.mGroups = groups;
+    public GroupRVAdapter() {
+        this.mGroups = new ArrayList<>();
     }
 
     @Override
@@ -29,24 +29,25 @@ public class GroupRVAdapter extends RecyclerView.Adapter<GroupRVAdapter.GroupHol
         return new GroupHolder(view);
     }
 
+    public List<Group> getGroups() {
+        return new ArrayList<>(mGroups);
+    }
+
+    public void setGroups(List<Group> groups) {
+        mGroups.clear();
+        mGroups.addAll(groups);
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(GroupHolder holder, int position) {
         Group group = mGroups.get(position);
         holder.bindGroup(group);
     }
 
-    public List<Group> getGroups() {
-        return new ArrayList<>(mGroups);
-    }
-
     @Override
     public int getItemCount() {
         return mGroups.size();
-    }
-
-    public void setGroups(List<Group> groups) {
-        mGroups = groups;
-        notifyDataSetChanged();
     }
 
     public Group getItemSelected(MenuItem item) {
@@ -73,7 +74,6 @@ public class GroupRVAdapter extends RecyclerView.Adapter<GroupRVAdapter.GroupHol
 
         @Override
         public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-            //TODO dialog
             contextMenu.add(0, CM_DELETE, getAdapterPosition(), R.string.delete_record);
             contextMenu.add(0, CM_EDIT, getAdapterPosition(), R.string.edit_record);
         }

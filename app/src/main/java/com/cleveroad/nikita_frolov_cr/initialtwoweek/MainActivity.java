@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityDBHelper;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.view.ExamFragment;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.view.GroupFragment;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.view.MainFragment;
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
 //        deleteDatabase(UniversityDBHelper.DB_NAME);
+        UniversityDBHelper universityDBHelper = UniversityDBHelper.getInstance(this);
+        universityDBHelper.onCreate(universityDBHelper.getWritableDatabase());
         if(savedInstanceState == null){
             getSupportFragmentManager()
                     .beginTransaction()
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void editStudent(int id) {
+    public void editStudent(Long id) {
         goToFragment(EditStudentFragment.newInstance(id),
                 EditStudentFragment.class.getSimpleName());
     }
