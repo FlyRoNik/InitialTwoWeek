@@ -2,24 +2,25 @@ package com.cleveroad.nikita_frolov_cr.initialtwoweek;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.view.ExamFragment;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.view.GroupFragment;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.view.MainFragment;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.view.StudentFragment;
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.view.edit.EditExamFragment;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.view.edit.EditGroupFragment;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.view.edit.EditStudentFragment;
 
 public class MainActivity extends AppCompatActivity implements
-        StudentFragment.OnFragmentStudentListener, GroupFragment.OnFragmentGroupListener {
+        StudentFragment.OnFragmentStudentListener, GroupFragment.OnFragmentGroupListener, ExamFragment.OnFragmentExamListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //deleteDatabase(UniversityDBHelper.DB_NAME);
+//        deleteDatabase(UniversityDBHelper.DB_NAME);
         if(savedInstanceState == null){
             getSupportFragmentManager()
                     .beginTransaction()
@@ -57,4 +58,13 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
+    @Override
+    public void addExam() {
+        goToFragment(EditExamFragment.newInstance(), EditExamFragment.class.getSimpleName());
+    }
+
+    @Override
+    public void editExam(long id) {
+        goToFragment(EditExamFragment.newInstance(id), EditExamFragment.class.getSimpleName());
+    }
 }

@@ -16,7 +16,33 @@ public class MainFragment extends Fragment {
     private final static String[] TITLES = new String[]{"Students", "Groups", "Exams", "Ratings"};
 
     private ViewPager pWrap;
-    private PagerAdapter mPagerAdapter;
+    private PagerAdapter mPagerAdapter = new FragmentPagerAdapter(getChildFragmentManager()) {
+        @Override
+        public int getCount() {
+            return TITLES.length;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return StudentFragment.newInstance();
+                case 1:
+                    return GroupFragment.newInstance();
+                case 2:
+                    return ExamFragment.newInstance();
+                case 3:
+                    return RatingFragment.newInstance();
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return TITLES[position];
+        }
+    };
 
     public static MainFragment newInstance() {
         MainFragment fragment = new MainFragment();
@@ -33,38 +59,6 @@ public class MainFragment extends Fragment {
 
         pWrap = view.findViewById(R.id.vpWrap);
 
-        FragmentManager fragmentManager = getChildFragmentManager();
-        mPagerAdapter = new FragmentPagerAdapter(fragmentManager) {
-            @Override
-            public int getCount() {
-                return TITLES.length;
-            }
-
-            @Override
-            public Fragment getItem(int position) {
-                Fragment fragment = null;
-                switch (position) {
-                    case 0:
-                        fragment = StudentFragment.newInstance();
-                        break;
-                    case 1:
-                        fragment = GroupFragment.newInstance();
-                        break;
-                    case 2:
-                        fragment = ExamFragment.newInstance();
-                        break;
-                    case 3:
-                        fragment = RatingFragment.newInstance();
-                        break;
-                }
-                return fragment;
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return TITLES[position];
-            }
-        };
         pWrap.setAdapter(mPagerAdapter);
         return view;
     }

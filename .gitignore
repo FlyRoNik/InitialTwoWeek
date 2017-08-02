@@ -1,6 +1,6 @@
 local.properties
 .class
 build/
-idea/
-gradle/
+.idea/
+.gradle/
 

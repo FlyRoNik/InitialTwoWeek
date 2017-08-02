@@ -2,6 +2,7 @@ package com.cleveroad.nikita_frolov_cr.initialtwoweek;
 
 import android.app.Application;
 
+import com.activeandroid.ActiveAndroid;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityDBHelper;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.DaoMaster;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.DaoSession;
@@ -9,7 +10,7 @@ import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.DaoSession;
 import org.greenrobot.greendao.database.Database;
 
 
-public class App extends com.activeandroid.app.Application {
+public class App extends Application {
 
     private static App sInstance;
     private DaoSession mDaoSession;
@@ -22,6 +23,8 @@ public class App extends com.activeandroid.app.Application {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, UniversityDBHelper.DB_NAME);
         Database db = helper.getWritableDb();
         mDaoSession = new DaoMaster(db).newSession();
+
+        ActiveAndroid.initialize(this);
     }
 
     public static Application get() {

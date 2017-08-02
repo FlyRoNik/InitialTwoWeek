@@ -39,7 +39,8 @@ public class ExamRVAdapter extends RecyclerView.Adapter<ExamRVAdapter.ExamHolder
     }
 
     public void setExams(List<Exam> exams) {
-        this.mExams = exams;
+        mExams.clear();
+        mExams.addAll(exams);
         notifyDataSetChanged();
     }
 

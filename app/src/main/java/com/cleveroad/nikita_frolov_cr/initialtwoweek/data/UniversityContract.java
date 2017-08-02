@@ -41,7 +41,7 @@ public final class UniversityContract {
     public static final class ExamEntry implements BaseColumns {
         public static final String TABLE_EXAMS = "exams";
 
-        public final static String _ID = BaseColumns._ID;
+        public final static String _ID = "Id";
         public final static String COLUMN_NAME = "name_exam";
 
         public static final String TABLE_EXAMS_CREATE =

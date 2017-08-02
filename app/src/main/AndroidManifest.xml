@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cleveroad.nikita_frolov_cr.initialtwoweek">
-    <permission
-        android:name="com.cleveroad.PERMISSION"/>
+
+    <permission android:name="com.cleveroad.PERMISSION" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:name=".App"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -25,14 +25,23 @@
             android:authorities="com.cleveroad.nikita_frolov_cr.initialtwoweek.universitydb"
             android:enabled="true"
             android:exported="true"
-            android:readPermission="com.cleveroad.PERMISSION">
+            android:readPermission="com.cleveroad.PERMISSION" />
 
-        </provider>
-        <meta-data android:name="AA_DB_NAME" android:value="universitydb"/>
-        <meta-data android:name="AA_DB_VERSION" android:value="1" />
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="universitydb" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1" />
         <meta-data
             android:name="AA_MODELS"
             android:value="com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.Exam" />
+
+        <provider
+            android:name=".dao.ExamContentProvider"
+            android:authorities="com.cleveroad.nikita_frolov_cr.initialtwoweek.universitydb2"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>
