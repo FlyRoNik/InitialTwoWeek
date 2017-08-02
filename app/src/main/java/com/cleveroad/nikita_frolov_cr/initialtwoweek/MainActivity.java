@@ -31,22 +31,39 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void addStudent() {
-        goToFragment(EditStudentFragment.newInstance(), EditStudentFragment.class.getSimpleName());
+        goToFragment(EditStudentFragment.newInstance(),
+                EditStudentFragment.class.getSimpleName());
     }
 
     @Override
     public void editStudent(int id) {
-        goToFragment(EditStudentFragment.newInstance(id), EditStudentFragment.class.getSimpleName());
+        goToFragment(EditStudentFragment.newInstance(id),
+                EditStudentFragment.class.getSimpleName());
     }
 
     @Override
     public void addGroup() {
-        goToFragment(EditGroupFragment.newInstance(), EditGroupFragment.class.getSimpleName());
+        goToFragment(EditGroupFragment.newInstance(),
+                EditGroupFragment.class.getSimpleName());
     }
 
     @Override
     public void editGroup(long id) {
-        goToFragment(EditGroupFragment.newInstance(id), EditGroupFragment.class.getSimpleName());
+        goToFragment(EditGroupFragment.newInstance(id),
+                EditGroupFragment.class.getSimpleName());
+    }
+
+    @Override
+    public void addExam() {
+        goToFragment(EditExamFragment.newInstance(),
+                EditExamFragment.class.getSimpleName());
+    }
+
+
+    @Override
+    public void editExam(long id) {
+        goToFragment(EditExamFragment.newInstance(id),
+                EditExamFragment.class.getSimpleName());
     }
 
     private void goToFragment(Fragment fragment, String tag) {
@@ -55,16 +72,5 @@ public class MainActivity extends AppCompatActivity implements
                 .replace(R.id.llWrap, fragment)
                 .addToBackStack(tag)
                 .commit();
-    }
-
-
-    @Override
-    public void addExam() {
-        goToFragment(EditExamFragment.newInstance(), EditExamFragment.class.getSimpleName());
-    }
-
-    @Override
-    public void editExam(long id) {
-        goToFragment(EditExamFragment.newInstance(id), EditExamFragment.class.getSimpleName());
     }
 }

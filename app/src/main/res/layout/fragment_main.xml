@@ -5,7 +5,7 @@
     tools:context="com.cleveroad.nikita_frolov_cr.initialtwoweek.view.MainFragment">
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/vpWrap"
+        android:id="@+id/vpConteiner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="top">
