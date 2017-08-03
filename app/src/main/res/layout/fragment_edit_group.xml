@@ -60,8 +60,7 @@
                 android:id="@+id/etNameGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/edit_text_margin_left"
-                android:inputType="number" >
+                android:layout_marginLeft="@dimen/edit_text_margin_left" >
 
                 <requestFocus></requestFocus>
             </EditText>

@@ -63,7 +63,7 @@ android:fitsSystemWindows="true"
             android:text="Name" />
 
         <EditText
-            android:id="@+id/etName"
+            android:id="@+id/etNameStudent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/edit_text_margin_left">
@@ -76,12 +76,10 @@ android:fitsSystemWindows="true"
             android:layout_height="wrap_content"
             android:text="@string/group" />
 
-        <EditText
-            android:id="@+id/etGroup"
+        <Spinner
+            android:id="@+id/sChooseGroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/edit_text_margin_left"
-            android:inputType="number" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
 

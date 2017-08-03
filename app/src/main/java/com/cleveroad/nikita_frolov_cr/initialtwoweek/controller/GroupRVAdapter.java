@@ -18,8 +18,17 @@ import java.util.List;
 public class GroupRVAdapter extends RecyclerView.Adapter<GroupRVAdapter.GroupHolder>{
     private List<Group> mGroups;
 
-    public GroupRVAdapter(List<Group> groups) {
-        this.mGroups = groups;
+    public GroupRVAdapter() {
+        this.mGroups = new ArrayList<>();
+    }
+
+    public void setGroups(List<Group> groups) {
+        mGroups = groups;
+        notifyDataSetChanged();
+    }
+
+    public List<Group> getGroups() {
+        return new ArrayList<>(mGroups);
     }
 
     @Override
@@ -35,18 +44,9 @@ public class GroupRVAdapter extends RecyclerView.Adapter<GroupRVAdapter.GroupHol
         holder.bindGroup(group);
     }
 
-    public List<Group> getGroups() {
-        return new ArrayList<>(mGroups);
-    }
-
     @Override
     public int getItemCount() {
         return mGroups.size();
-    }
-
-    public void setGroups(List<Group> groups) {
-        mGroups = groups;
-        notifyDataSetChanged();
     }
 
     public Group getItemSelected(MenuItem item) {

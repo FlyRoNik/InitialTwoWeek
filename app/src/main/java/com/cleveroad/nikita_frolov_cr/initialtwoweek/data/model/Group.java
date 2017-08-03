@@ -1,20 +1,27 @@
 package com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model;
 
+import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.NotNull;
 import org.greenrobot.greendao.annotation.Property;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.DaoException;
+import org.greenrobot.greendao.annotation.ToMany;
+
+import java.util.List;
 
 @Entity(active = true, nameInDb = "groups", createInDb = false)
 public class Group {
     @Id
+    @Property(nameInDb = "_id")
     private Long id;
 
     @NotNull
     @Property(nameInDb = "name_group")
     private String name;
+
+    @ToMany(referencedJoinProperty = "idGroup")
+    private List<Student> students;
 
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
@@ -48,6 +55,34 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 20851861)
+    public List<Student> getStudents() {
+        if (students == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            StudentDao targetDao = daoSession.getStudentDao();
+            List<Student> studentsNew = targetDao._queryGroup_Students(id);
+            synchronized (this) {
+                if (students == null) {
+                    students = studentsNew;
+                }
+            }
+        }
+        return students;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 238993120)
+    public synchronized void resetStudents() {
+        students = null;
     }
 
     /**
@@ -92,5 +127,4 @@ public class Group {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getGroupDao() : null;
     }
-
 }

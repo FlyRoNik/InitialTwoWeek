@@ -5,7 +5,6 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -17,36 +16,35 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.App;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.BuildConfig;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.R;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.controller.StudentRVAdapter;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.dao.StudentRepository;
-import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityContract;
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityContract.StudentEntry;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityDBHelper;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.Student;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.util.InterfaceNotImplement;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class StudentFragment extends Fragment implements View.OnClickListener,
-        LoaderManager.LoaderCallbacks<List<Student>> {
-    private static final int LOADER_MANAGER_ID = 1;
+public class StudentFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Student>> {
+    private static final Uri STUDENT_UPDATE_URI = Uri.parse("content://"
+            + BuildConfig.APPLICATION_ID + "." + UniversityDBHelper.DB_NAME + "/" +
+            StudentEntry.TABLE_STUDENTS);
 
     private static final int CM_DELETE = 1;
     private static final int CM_EDIT = 2;
 
-    private static final Uri STUDENT_URI = Uri.parse("content://"
-            + BuildConfig.APPLICATION_ID + "." + UniversityDBHelper.DB_NAME + "/" +
-            UniversityContract.StudentEntry.TABLE_STUDENTS);
+    private static final int LOADER_MANAGER_ID = 1;
 
-    private StudentRepository mStudentRepository;
-    private OnFragmentStudentListener mListener;
+    private RecyclerView rvStudents;
     private StudentRVAdapter mStudentRVAdapter;
+    private OnFragmentStudentListener mListener;
+    private StudentRepository mStudentRepository;
     private ContentObserver mContentObserver = new ContentObserver(new Handler()) {
         @Override
         public boolean deliverSelfNotifications() {
-
             return super.deliverSelfNotifications();
         }
 
@@ -62,9 +60,6 @@ public class StudentFragment extends Fragment implements View.OnClickListener,
         }
     };
 
-    private RecyclerView rvStudents;
-    private FloatingActionButton bAddStudent;
-
     public static StudentFragment newInstance() {
         StudentFragment fragment = new StudentFragment();
         Bundle args = new Bundle();
@@ -73,36 +68,10 @@ public class StudentFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_student, container, false);
-
-        bAddStudent = view.findViewById(R.id.bAddStudent);
-        bAddStudent.setOnClickListener(this);
-
-        rvStudents = view.findViewById(R.id.rvStudents);
-        rvStudents.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        mStudentRVAdapter = new StudentRVAdapter(new ArrayList<Student>());
-        rvStudents.setAdapter(mStudentRVAdapter);
-
-        registerForContextMenu(rvStudents);
-
-        mStudentRepository = new StudentRepository();
-
-        getLoaderManager().initLoader(LOADER_MANAGER_ID, null, this);
-        getActivity().getContentResolver()
-                .registerContentObserver(STUDENT_URI, true, mContentObserver);
+    public void onResume() {
+        super.onResume();
         getLoaderManager().getLoader(LOADER_MANAGER_ID).forceLoad();
-
-        return view;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -111,29 +80,46 @@ public class StudentFragment extends Fragment implements View.OnClickListener,
             mListener = (OnFragmentStudentListener) context;
         } else {
             throw  new InterfaceNotImplement(context.toString()
-            + " must implement " + OnFragmentStudentListener.class.getSimpleName());
+                    + " must implement " + OnFragmentStudentListener.class.getSimpleName());
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_student, container, false);
+        view.findViewById(R.id.bAddStudent).setOnClickListener(view1 -> mListener.addStudent());
+
+        rvStudents = view.findViewById(R.id.rvStudents);
+        mStudentRVAdapter = new StudentRVAdapter();
+        rvStudents.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvStudents.setAdapter(mStudentRVAdapter);
+
+        registerForContextMenu(rvStudents);
+        rvStudents.setOnCreateContextMenuListener(this);
+
+        mStudentRepository = new StudentRepository(getContext().getContentResolver(),
+                ((App)getActivity().getApplication()).getDaoSession());
+        getLoaderManager().initLoader(LOADER_MANAGER_ID, null, this);
+        getActivity().getContentResolver()
+                .registerContentObserver(STUDENT_UPDATE_URI, true, mContentObserver);
+
+        return view;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        getActivity().getContentResolver()
+                .unregisterContentObserver(mContentObserver);
         mListener = null;
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.bAddStudent:
-                mListener.addStudent();
-                break;
-        }
     }
 
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case CM_DELETE:
-                mStudentRepository.removeStudent(mStudentRVAdapter.getItemSelected(item).getId());
+                mStudentRepository.deleteStudent(mStudentRVAdapter.getItemSelected(item).getId());
+                getLoaderManager().getLoader(LOADER_MANAGER_ID).forceLoad();
                 break;
             case CM_EDIT:
                 mListener.editStudent(mStudentRVAdapter.getItemSelected(item).getId());
@@ -152,7 +138,6 @@ public class StudentFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onLoadFinished(Loader<List<Student>> loader, List<Student> data) {
         mStudentRVAdapter.setStudents(data);
-        mStudentRVAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -177,6 +162,6 @@ public class StudentFragment extends Fragment implements View.OnClickListener,
     public interface OnFragmentStudentListener {
         void addStudent();
 
-        void editStudent(int id);
+        void editStudent(long id);
     }
 }

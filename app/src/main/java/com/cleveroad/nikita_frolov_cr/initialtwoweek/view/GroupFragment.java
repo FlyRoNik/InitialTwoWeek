@@ -1,9 +1,14 @@
 package com.cleveroad.nikita_frolov_cr.initialtwoweek.view;
 
 import android.content.Context;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,36 +17,50 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.App;
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.BuildConfig;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.R;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.controller.GroupRVAdapter;
-import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.DaoSession;
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.dao.GroupRepository;
+import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityDBHelper;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.Group;
-import com.cleveroad.nikita_frolov_cr.initialtwoweek.data.model.GroupDao;
 import com.cleveroad.nikita_frolov_cr.initialtwoweek.util.InterfaceNotImplement;
 
-import org.greenrobot.greendao.query.Query;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class GroupFragment extends Fragment {
+import static com.cleveroad.nikita_frolov_cr.initialtwoweek.R.id.bAddGroup;
+import static com.cleveroad.nikita_frolov_cr.initialtwoweek.data.UniversityContract.GroupEntry;
 
-    private FloatingActionButton bAddGroup;
-    private RecyclerView rvGroups;
-
-    private GroupRVAdapter mGroupRVAdapter;
-    private List<Group> mGroups;
-    private OnFragmentGroupListener mListener;
+public class GroupFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<Group>>{
+    private static final Uri GROUP_UPDATE_URI = Uri.parse("content://"
+            + BuildConfig.APPLICATION_ID + "." + UniversityDBHelper.DB_NAME + "/" +
+            GroupEntry.TABLE_GROUPS);
 
     private static final int CM_DELETE = 3;
     private static final int CM_EDIT = 4;
 
-    private GroupDao mGroupDao;
-    private Query<Group> groupsQuery;
+    private static final int LOADER_MANAGER_ID = 3;
 
-    public GroupDao getGroupDao() {
-        return mGroupDao;
-    }
+    private RecyclerView rvGroups;
+    private GroupRVAdapter mGroupRVAdapter;
+    private OnFragmentGroupListener mListener;
+    private GroupRepository mGroupRepository;
+    private ContentObserver mContentObserver = new ContentObserver(new Handler()) {
+        @Override
+        public boolean deliverSelfNotifications() {
+            return super.deliverSelfNotifications();
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            super.onChange(selfChange);
+            getLoaderManager().getLoader(LOADER_MANAGER_ID).forceLoad();
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            super.onChange(selfChange, uri);
+        }
+    };
 
     public static GroupFragment newInstance() {
         GroupFragment fragment = new GroupFragment();
@@ -51,34 +70,9 @@ public class GroupFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_group, container, false);
-
-        rvGroups = view.findViewById(R.id.rvGroups);
-        bAddGroup = view.findViewById(R.id.bAddGroup);
-
-        mGroups = new ArrayList<>();
-        mGroupRVAdapter = new GroupRVAdapter(mGroups);
-        rvGroups.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvGroups.setAdapter(mGroupRVAdapter);
-
-        registerForContextMenu(rvGroups);
-        rvGroups.setOnCreateContextMenuListener(this);
-
-        DaoSession daoSession = ((App)getActivity().getApplication()).getDaoSession();
-        mGroupDao = daoSession.getGroupDao();
-
-        groupsQuery = mGroupDao.queryBuilder().build();
-        updateGroups();
-
-        bAddGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addGroup();
-            }
-        });
-        return view;
+    public void onResume() {
+        super.onResume();
+        getLoaderManager().getLoader(LOADER_MANAGER_ID).forceLoad();
     }
 
     @Override
@@ -93,16 +87,41 @@ public class GroupFragment extends Fragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_group, container, false);
+        view.findViewById(bAddGroup).setOnClickListener(view1 -> mListener.addGroup());
+
+        rvGroups = view.findViewById(R.id.rvGroups);
+        mGroupRVAdapter = new GroupRVAdapter();
+        rvGroups.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvGroups.setAdapter(mGroupRVAdapter);
+
+        registerForContextMenu(rvGroups);
+        rvGroups.setOnCreateContextMenuListener(this);
+
+        mGroupRepository = new GroupRepository(getContext().getContentResolver(),
+                ((App)getActivity().getApplication()).getDaoSession());
+        getLoaderManager().initLoader(LOADER_MANAGER_ID, null, this);
+        getActivity().getContentResolver()
+                .registerContentObserver(GROUP_UPDATE_URI, true, mContentObserver);
+
+        return view;
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
+        getActivity().getContentResolver()
+                .unregisterContentObserver(mContentObserver);
         mListener = null;
     }
 
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case CM_DELETE:
-                mGroupDao.deleteByKey(mGroupRVAdapter.getItemSelected(item).getId());
-                updateGroups();
+                mGroupRepository.deleteGroup(mGroupRVAdapter.getItemSelected(item).getId());
+                getLoaderManager().getLoader(LOADER_MANAGER_ID).forceLoad();
                 break;
             case CM_EDIT:
                 mListener.editGroup(mGroupRVAdapter.getItemSelected(item).getId());
@@ -113,13 +132,33 @@ public class GroupFragment extends Fragment {
         return true;
     }
 
-    public void updateGroups() {
-        mGroups = groupsQuery.list();
-        mGroupRVAdapter.setGroups(mGroups);
+    @Override
+    public Loader<List<Group>> onCreateLoader(int id, Bundle args) {
+        return new GroupsATLoader(getContext(), mGroupRepository);
     }
 
-    private void addGroup() {
-        mListener.addGroup();
+    @Override
+    public void onLoadFinished(Loader<List<Group>> loader, List<Group> data) {
+        mGroupRVAdapter.setGroups(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Group>> loader) {
+
+    }
+
+    private static class GroupsATLoader extends AsyncTaskLoader<List<Group>> {
+        private GroupRepository mGroupRepository;
+
+        GroupsATLoader(Context context, GroupRepository groupRepository) {
+            super(context);
+            mGroupRepository = groupRepository;
+        }
+
+        @Override
+        public List<Group> loadInBackground() {
+            return mGroupRepository.getAllGroups();
+        }
     }
 
     public interface OnFragmentGroupListener {
